@@ -1,0 +1,19 @@
+<script src="bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+<script src="angular.min.js"></script>
+<script src="urlStatuscontroller.js"></script>
+
+<link rel="stylesheet" href="bootstrap-3.3.6-dist/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="styles.css">
+<div  ng-app="HelloWorldApp" class="jumbotron">
+    <div  ng-controller="HelloWorldController" class="container">
+        <h1>Checking URLs for you {{version}}</h1>
+
+        <div ng-repeat="server in servers" class="btn-block btn-group-vertical">
+
+            <div class="btn" ng-class="resolveClassByStatus(server)">
+                <a href={{server.url}}>{{server.url}}</a>
+            </div>
+        </div>
+    </div>
+</div>
