@@ -1,4 +1,4 @@
-function pinger(url, callback) {
+function Pinger(url, callback) {
     //from http://jsfiddle.net/GSSCD/203/
     if (!this.inUse) {
         this.status = 'unchecked';
@@ -12,17 +12,17 @@ function pinger(url, callback) {
             _that.callback('responded');
 
         };
-        this.img.onerror = function (e) {
+        this.img.onerror = function (event) {
             if (_that.inUse) {
                 _that.inUse = false;
-                console.log("access url:" + _that.url + " responded");
-                _that.callback('responded', e);
+                console.log("access url:" + _that.url + " responded" + "with error" + event.message);
+                _that.callback('responded');
             }
 
         };
         this.start = new Date().getTime();
         this.img.src = url;
-        this.timer = setTimeout(function () {
+        setTimeout(function () {
             if (_that.inUse) {
                 _that.inUse = false;
                 console.log("access url:" + _that.url + " timeout");
@@ -42,15 +42,16 @@ angular.module('HelloWorldApp', [])
    function($scope, $http, $window) {
         $scope.version = "0.0.0";
         $scope.servers = [
-            {name:"2",status:"unchecked",url:"http://www.ynet.co.il/"},
-            {name:"1",status:"unchecked",url:"http://127.0.0.1"},
-            {name:"3",status:"unchecked",url:"http://index.html"},
-            {name:"3",status:"unchecked",url:"http://localhost:63342/UrlStatus/index.html"}
-
+            {name:"Jira",status:"unchecked",url:"https://jira-server.ngsoft.com/"},
+            {name:"Isufit",status:"unchecked",url:"https://isufit.ngsoft.com/"},
+            {name:"Sharepoint",status:"unchecked",url:"https://sharepoint.ngsoft.com/"},
+            {name:"3271 MySudexo",status:"unchecked",url:"http://mysodexo.co.il/"},
+            {name:"Jenkins",status:"unchecked",url:"http://Jenkins_server:8080/"},
+            {name:"SonarQube",status:"unchecked",url:"http://10.30.50.27:9000/"},
         ];
 
        var statusStylesMap = {
-           unchecked : "btn-warning",
+           unchecked : "btn-info",
            checking : "btn-warning",
            responded : "btn-success",
            timeout : "btn-danger"
@@ -63,7 +64,7 @@ angular.module('HelloWorldApp', [])
        $scope.gotoServerUrl = function(server) {
            console.log("Redirecting to " + server.url);
            $window.location.href =server.url;
-       }
+       };
 
 
        function updateServerStatus(server, status) {
@@ -73,19 +74,20 @@ angular.module('HelloWorldApp', [])
 
        function verifyServerUrlIsAvailable2(server) {
            var url = server.url;
-           console.log("About to pinger url:" + url);
+           console.log("About to Ping url:" + url);
            server.status = "checking";
-               new pinger(server.url,
-                   function (status, e) {
+               new Pinger(server.url,
+                   function (status) {
                        updateServerStatus(server, status);
                    });
        }
 
-       var init = function(servers){
+       var init = function(){
+           var servers = $scope.servers;
             servers.forEach(function(server){
                 verifyServerUrlIsAvailable2(server);
             });
         };
 
-       init($scope.servers);
+       init();
 }]);
