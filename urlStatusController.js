@@ -49,61 +49,22 @@ angular.module('HelloWorldApp', [])
 
         ];
 
+       var statusStylesMap = {
+           unchecked : "btn-warning",
+           checking : "btn-warning",
+           responded : "btn-success",
+           timeout : "btn-danger"
+       };
 
-       //TODO refactor
-       //var colourMap = {
-        //   speciality1: "speciality1Class",
-        //   speciality2: "speciality2Class",
-        //   speciality3: "speciality3Class",
-       //};
-       //
-       //$scope.getBackgroundColour = function(singleCase) {
-        //   return colourMap[singleCase.speciality];
-       //};
-
-       $scope.resolveClassByStatus = function (server) {
-           var result = "btn-default";
-           console.log("Reevaluating :" + server.url + server.status);
-           switch (server.status) {
-               case "unchecked" :
-                   result = "btn-danger";
-                   break;
-               case "checking" :
-                   console.log("access url:" + server.url + " checking");
-                   result = "btn-warning";
-                   break;
-               case "responded" :
-                   console.log("access url:" + server.url + " responded");
-                   result = "btn-success";
-                   break;
-               case "timeout" :
-                   result = "btn-danger";
-                   break;
-           }
-           return result;
-       }
+       $scope.resolveClassByStatus = function(server) {
+           return statusStylesMap[server.status];
+       };
 
        $scope.gotoServerUrl = function(server) {
            console.log("Redirecting to " + server.url);
            $window.location.href =server.url;
        }
 
-
-       function verifyServerUrlIsAvailable(server) {
-           var url = server.url;
-           console.log("About to access url:" + url);
-
-           $http.get(url).then(
-               function () {
-                   server.status = "pass";
-                   console.log("access url:" + url + " PASS");
-               },
-               function () {
-                   server.status = "fail";
-                   console.log("access url:" + url + " FAIL");
-               }
-           );
-       }
 
        function updateServerStatus(server, status) {
            server.status = status;
