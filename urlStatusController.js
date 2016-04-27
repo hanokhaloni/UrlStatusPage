@@ -4,7 +4,7 @@ function pinger(url, callback) {
         this.status = 'unchecked';
         this.inUse = true;
         this.callback = callback;
-        this.ip = url;
+        this.url = url;
         var _that = this;
         this.img = new Image();
         this.img.onload = function () {
@@ -15,7 +15,7 @@ function pinger(url, callback) {
         this.img.onerror = function (e) {
             if (_that.inUse) {
                 _that.inUse = false;
-                console.log("access url:" + url + " responded");
+                console.log("access url:" + _that.url + " responded");
                 _that.callback('responded', e);
             }
 
@@ -25,7 +25,7 @@ function pinger(url, callback) {
         this.timer = setTimeout(function () {
             if (_that.inUse) {
                 _that.inUse = false;
-                console.log("access url:" + url + " timeout");
+                console.log("access url:" + _that.url + " timeout");
                 _that.callback('timeout');
             }
         }, 1500);
@@ -38,8 +38,8 @@ angular.module('HelloWorldApp', [])
     .config(function($httpProvider){
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     })
-   .controller('HelloWorldController',['$scope', '$http',
-   function($scope, $http) {
+   .controller('HelloWorldController',['$scope', '$http', '$window',
+   function($scope, $http, $window) {
         $scope.version = "0.0.0";
         $scope.servers = [
             {name:"2",status:"unchecked",url:"http://www.ynet.co.il/"},
@@ -81,6 +81,11 @@ angular.module('HelloWorldApp', [])
                    break;
            }
            return result;
+       }
+
+       $scope.gotoServerUrl = function(server) {
+           console.log("Redirecting to " + server.url);
+           $window.location.href =server.url;
        }
 
 

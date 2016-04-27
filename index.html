@@ -11,9 +11,9 @@
 
         <div ng-repeat="server in servers" class="btn-block btn-group-vertical">
 
-            <div class="btn" ng-class="resolveClassByStatus(server)">
-                <a href={{server.url}}>{{server.url}}</a>
-            </div>
+            <button  class="btn" ng-class="resolveClassByStatus(server)" ng-click="gotoServerUrl(server)">
+                {{server.name}} - {{server.url}}
+            </button>
         </div>
     </div>
 </div>
