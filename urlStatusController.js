@@ -66,13 +66,7 @@ angular.module('HelloWorldApp', [])
            $window.location.href =server.url;
        };
 
-
-       function updateServerStatus(server, status) {
-           server.status = status;
-           $scope.$apply();//TODO this is BAD!
-       }
-
-       function verifyServerUrlIsAvailable2(server) {
+	   $scope.verifyServerUrlIsAvailable2 = function(server) {
            var url = server.url;
            console.log("About to Ping url:" + url);
            server.status = "checking";
@@ -80,14 +74,21 @@ angular.module('HelloWorldApp', [])
                    function (status) {
                        updateServerStatus(server, status);
                    });
-       }
+       };
 
        var init = function(){
            var servers = $scope.servers;
             servers.forEach(function(server){
-                verifyServerUrlIsAvailable2(server);
+                $scope.verifyServerUrlIsAvailable2(server);
             });
         };
+
+
+       function updateServerStatus(server, status) {
+           server.status = status;
+           $scope.$apply();//TODO this is BAD!
+       }
+
 
        init();
 }]);
